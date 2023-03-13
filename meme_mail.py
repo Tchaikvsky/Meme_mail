@@ -48,11 +48,6 @@ with open("random_image.jpg", 'rb') as file:
     image = MIMEImage(img_data, name="random_image.jpg")
     msg.attach(image)
 
-#use SMTP to send the email
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server.login(email_address, email_password)
-server.sendmail(email_address, receiver_address, msg.as_string())
-server.quit()
+#Send mail
 
 os.remove("random_image.jpg")
