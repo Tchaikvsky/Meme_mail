@@ -48,6 +48,7 @@ with open("random_image.jpg", 'rb') as file:
     image = MIMEImage(img_data, name="random_image.jpg")
     msg.attach(image)
 
-#Send mail
+#To avoid the hastle of authentication, authentication, setting up a smtp server, let's use email sending through mailtrap
+
 
 os.remove("random_image.jpg")
