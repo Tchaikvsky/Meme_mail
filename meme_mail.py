@@ -2,7 +2,6 @@ import os
 import urllib.request
 import praw
 import random
-import imghdr
 from pathlib import Path
 from dotenv import load_dotenv
 import smtplib
