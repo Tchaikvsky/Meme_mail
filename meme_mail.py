@@ -6,9 +6,6 @@ import mailtrap as mt
 import imghdr
 import base64
 from pathlib import Path
-#from email.mime.multipart import MIMEMultipart
-#from email.mime.text import MIMEText
-#from email.mime.image import MIMEImage
 from dotenv import load_dotenv
 
 #loading the environment variables using dotenv
@@ -41,23 +38,6 @@ while image_found == False:
         image_found = True
 
 me_me_image = Path(__file__).parent.joinpath("random_image.jpg").read_bytes()
-
-#create the email using email.mime *legacy*
-"""
-msg = MIMEMultipart()
-msg['From'] = email_address
-msg['To'] = receiver_address
-msg["Subject"] = ("It's memeing taimu")
-"""
-
-#mail attachment using legacy method
-"""
-with open("random_image.jpg", 'rb') as file:
-    img_data = file.read()
-    image = MIMEImage(img_data, name="random_image.jpg")
-    msg.attach(image)
-"""
-
 
 #create mail using mailtrap
 mail = mt.Mail(
