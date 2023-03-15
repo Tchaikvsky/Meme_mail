@@ -25,7 +25,7 @@ receiver_address = os.environ.get("RECEIVER_ADDRESS")
 reddit = praw.Reddit( client_id = client_id, client_secret = client_secret, user_agent = user_agent)
 
 #list of valid subreddits from my friends choice and randomly selecting one
-subreddits = ['me_irl']
+subreddits = ['me_irl','2meirl4meirl','anime_irl','absolutelynotmeirl']
 random_subreddit = reddit.subreddit(random.choice(subreddits))
 
 
