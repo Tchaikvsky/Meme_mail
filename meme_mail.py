@@ -3,7 +3,6 @@ import urllib.request
 import praw
 import random
 import imghdr
-import base64
 from pathlib import Path
 from dotenv import load_dotenv
 import smtplib
@@ -47,11 +46,13 @@ msg = MIMEMultipart()
 msg['From'] = email_address
 msg['To'] = receiver_address
 msg["Subject"] = ("It's me me time")
+msg.attach(MIMEText('<img src="cid:image1">', 'html'))
 
 #mail attachment
 with open("random_image.jpg", 'rb') as file:
     img_data = file.read()
     image = MIMEImage(img_data, name="random_image.jpg")
+    image.add_header('Content-ID', '<image1>')
     msg.attach(image)
 
 #security layer
