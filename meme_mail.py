@@ -2,11 +2,15 @@ import os
 import urllib.request
 import praw
 import random
-import mailtrap as mt
 import imghdr
 import base64
 from pathlib import Path
 from dotenv import load_dotenv
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import ssl
 
 #loading the environment variables using dotenv
 load_dotenv("meme_mail.env")
@@ -18,7 +22,6 @@ user_agent = os.environ.get("REDDIT_USER_AGENT")
 email_address = os.environ.get("EMAIL_ADDRESS")
 email_password = os.environ.get("EMAIL_PASSWORD")
 receiver_address = os.environ.get("RECEIVER_ADDRESS")
-mailtrap_token = os.environ.get("MAILTRAP_TOKEN")
 
 #create a PRAW instance
 reddit = praw.Reddit( client_id = client_id, client_secret = client_secret, user_agent = user_agent)
@@ -39,31 +42,23 @@ while image_found == False:
 
 me_me_image = Path(__file__).parent.joinpath("random_image.jpg").read_bytes()
 
-#create mail using mailtrap
-mail = mt.Mail(
-    sender=mt.Address(email=email_address, name="Michael"),
-    to=[mt.Address(email=receiver_address)],
-    subject="TIME TO MEME IT UP",
-    html="""<html>
-            <body>
-                <h1>Pain.</h1>
-                <img src="cid:me_me_image">
-            </body>
-            </html>""",
-    attachments=[
-        mt.Attachment(
-            content=base64.b64encode(me_me_image),
-            filename="random_image.jpg",
-            disposition=mt.Disposition.INLINE,
-            mimetype="image/jpg",
-            content_id="me_me_image",
-        )
-    ],
-)
+#create the email
+msg = MIMEMultipart()
+msg['From'] = email_address
+msg['To'] = receiver_address
+msg["Subject"] = ("It's me me time")
 
+#mail attachment
+with open("random_image.jpg", 'rb') as file:
+    img_data = file.read()
+    image = MIMEImage(img_data, name="random_image.jpg")
+    msg.attach(image)
 
-#To avoid the hastle of authentication, authentication, setting up a smtp server, let's use email sending through mailtrap
-client = mt.MailtrapClient(token=mailtrap_token)
-client.send(mail)
+#security layer
+context = ssl.create_default_context()
+
+with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+    smtp.login(email_address, email_password)
+    smtp.sendmail(email_address, receiver_address, msg.as_string())
 
 os.remove("random_image.jpg")
