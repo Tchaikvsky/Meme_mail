@@ -1,2 +1,5 @@
 #ignore credentials
 meme_mail.env
+my_lambda_function
+my_lambda_function.zip
+.DS_Store
